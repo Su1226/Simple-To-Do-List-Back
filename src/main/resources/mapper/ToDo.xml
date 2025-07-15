@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.korit.simpletodolistback.domain.todo.ToDoMapper">
+
+    <resultMap id="ToDoMap" type="com.korit.simpletodolistback.domain.todo.ToDo">
+        <id property="todoId" column="todo_id" />
+        <result property="todoContent" column="todo_content" />
+        <result property="todoDate" column="todo_date" />
+    </resultMap>
+
+    <insert id="register" useGeneratedKeys="true" keyProperty="todoId">
+        insert into todo_tb
+        values (default, #{todoContent}, #{todoDate})
+    </insert>
+
+    <select id="findAll" resultMap="ToDoMap">
+        select
+        todo_id,
+        todo_content,
+        todo_date
+        from
+        todo_tb;
+    </select>
+
+    <delete id="deleteOne">
+        delete
+        from
+        todo_tb
+        where
+        todo_id = #{todoId}
+    </delete>
+
+    <delete id="deleteById" parameterType="list">
+        delete
+        from
+        todo_tb
+        where
+        todo_id in <foreach item="todoId" collection="todoIds" open="(" separator="," close=")">#{todoId}</foreach>
+    </delete>
+
+    <update id="modifyById">
+        update
+        todo_tb
+        set
+        todo_content = #{todoContent}
+        where
+        todo_id = #{todoId}
+    </update>
+
+</mapper>
